@@ -1,6 +1,6 @@
 print("====Wicon, a LUA console over wifi.==========")
 print("Author: openthings@163.com. copyright&GPL V2.")
-print("Last modified SW 29Sep15 V0.0.1")
+print("Last modified SW 309Sep15 V0.0.2")
 print("Waiting for connection")
 
 gpiolookup = {[0]=3,[1]=10,[2]=4,[3]=9,[4]=1,[5]=2,[10]=12,[12]=6,[13]=7,[14]=5,[15]=8,[16]=0};
@@ -62,7 +62,7 @@ function startServer()
    print("Wifi AP connected. Wicon IP:")
    print(wifi.sta.getip())
    sv=net.createServer(net.TCP, 3600)
-   sv:listen(42001, "192.168.0.16", connected)
+   sv:listen(42001, connected)
    print("Server running at :42001")
    print("")
 end
