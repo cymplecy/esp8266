@@ -1,6 +1,6 @@
 print("====Wicon, a LUA console over wifi.==========")
 print("Author: openthings@163.com. copyright&GPL V2.")
-print("Last modified SW 309Sep15 V0.0.2")
+print("Last modified SW 30Sep15 V0.0.3")
 print("Waiting for connection")
 
 gpiolookup = {[0]=3,[1]=10,[2]=4,[3]=9,[4]=1,[5]=2,[10]=12,[12]=6,[13]=7,[14]=5,[15]=8,[16]=0};
@@ -59,19 +59,30 @@ function connected(conn)
 end
 
 function startServer()
-   print("Wifi AP connected. Wicon IP:")
-   print(wifi.sta.getip())
    sv=net.createServer(net.TCP, 3600)
    sv:listen(42001, connected)
    print("Server running at :42001")
    print("")
 end
 
+print("Setting the device up as a STATION")
+wifi.setmode(wifi.STATION)
+
+print("Connecting to the AP")
+wifi.sta.config("CYCY", "")
+wifi.sta.connect()
+
+print("Waiting a little bit to get an IP address...")
+
+
 tmr.alarm(1, 1000, 1, function() 
-   if wifi.sta.getip()=="0.0.0.0" then
-      print("Connect AP, Waiting...") 
+   if wifi.sta.getip()=="0.0.0.0" or wifi.sta.getip() == nil then
+      print("Waiting for IP ...") 
    else
+      print("Wifi AP connected. IP:")
+      print(wifi.sta.getip())
       startServer()
       tmr.stop(1)
    end
 end)
+
