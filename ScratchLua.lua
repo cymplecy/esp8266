@@ -1,6 +1,6 @@
 print("====Wicon, a LUA console over wifi.==========")
 print("Author: openthings@163.com. copyright&GPL V2.")
-print("Last modified SW 30Sep15 V0.0.3")
+print("Last modified SW 30Sep15 V0.0.4")
 print("Waiting for connection")
 
 gpiolookup = {[0]=3,[1]=10,[2]=4,[3]=9,[4]=1,[5]=2,[10]=12,[12]=6,[13]=7,[14]=5,[15]=8,[16]=0};
@@ -9,6 +9,28 @@ stripPin = 2   -- Comment: GPIO5
 wsg = 0  
 wsr = 0 
 wsb = 0  
+
+sparkleTable ={"ABC","ABC","ABC","ABC","ABC","ABC","ABC","ABC","ABC","ABC","ABC","ABC","ABC","ABC","ABC","ABC","ABC","ABC","ABC","ABC","ABC","ABC","ABC","ABC","ABC","ABC","ABC","ABC","ABC","ABC","ABC","ABC","ABC"}
+
+
+function split(pString, pPattern)
+   local Table = {}  -- NOTE: use {n = 0} in Lua-5.0
+   local fpat = "(.-)" .. pPattern
+   local last_end = 1
+   local s, e, cap = pString:find(fpat, 1)
+   while s do
+          if s ~= 1 or cap ~= "" then
+         table.insert(Table,cap)
+          end
+          last_end = e+1
+          s, e, cap = pString:find(fpat, last_end)
+   end
+   if last_end <= #pString then
+          cap = pString:sub(last_end)
+          table.insert(Table, cap)
+   end
+   return Table
+end
 
 
 function connected(conn)
@@ -43,11 +65,17 @@ function connected(conn)
          --wsnum = tonumber(string.sub(pkt,8,9))
          wsrgb = string.sub(pkt,8,-1)
          print ("Wsnum,wsrgb:" .. wsrgb) 
-         r = tonumber(string.sub(wsrgb,1,3))
-         g = tonumber(string.sub(wsrgb,5,7))
-         b = tonumber(string.sub(wsrgb,9,-1))
-         print (" " .. r .. g .. b)
-         rgb = string.char(r, g, b) 
+         myTable = split(wsrgb,",")
+         sparkleNum = tonumber(myTable[1])
+         r = tonumber(myTable[2])
+         g = tonumber(myTable[3])
+         b = tonumber(myTable[4])
+         sparkleTable[sparkleNum] = string.char(r, g, b) 
+         --print (sparkleTable)
+         rgb = ""
+         for loop = 1,12 do
+           rgb = (rgb .. sparkleTable[loop])
+         end
          ws2812.writergb(stripPin, rgb)
       end
    end)
@@ -57,6 +85,8 @@ function connected(conn)
       print ("")
    end)
 end
+
+
 
 function startServer()
    sv=net.createServer(net.TCP, 3600)
