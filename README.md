@@ -21,6 +21,11 @@ broadcast gpio15on
 
 will switch gpio15on
 
+broadcast sparkle 1,255,0,0
+
+will set the first neopixel/sparkle to red
+
+
 For Scratch
 
 Run lanpy.py and then load in Scratch and enable Remote Sensor Connectors
