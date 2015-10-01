@@ -45,38 +45,47 @@ function connected(conn)
       --node.input(pl) 
       msg = string.sub(pl,5,-1)
       print ("msg received:" .. msg)
-      pkt = string.sub(msg,12,-2)
-      if string.sub(pkt,1,4) == "gpio" then
-        gpin = 15
-        state = gpio.LOW
-        if string.sub(pkt,-2,-1) == "on" then
-            state = gpio.HIGH
-            print ("gpin:" .. string.sub(pkt,5,-3))
-            gpin = tonumber(string.sub(pkt,5,-3))
-        end
-        if string.sub(pkt,-3,-1) == "off" then
+      if string.sub(msg,1,9) == "broadcast" then
+          word=msg:match('%"(%a+)%"')
+          msg = string.gsub(msg, "%s+", "")
+          quote2 = string.find(msg, '"', 11 )
+          pkt = string.sub(msg,11,quote2 - 1)
+          print ("pkt:" .. pkt)
+          if string.sub(pkt,1,4) == "gpio" then
+            gpin = 15
             state = gpio.LOW
-            print ("gpin:" .. string.sub(pkt,5,-4))            
-            gpin = tonumber(string.sub(pkt,5,-4))
-        end
-        gpio.write(gpiolookup[gpin],state);    
-      end
-      if string.sub(pkt,1,7) == "sparkle" then
-         --wsnum = tonumber(string.sub(pkt,8,9))
-         wsrgb = string.sub(pkt,8,-1)
-         print ("Wsnum,wsrgb:" .. wsrgb) 
-         myTable = split(wsrgb,",")
-         sparkleNum = tonumber(myTable[1])
-         r = tonumber(myTable[2])
-         g = tonumber(myTable[3])
-         b = tonumber(myTable[4])
-         sparkleTable[sparkleNum] = string.char(r, g, b) 
-         --print (sparkleTable)
-         rgb = ""
-         for loop = 1,12 do
-           rgb = (rgb .. sparkleTable[loop])
-         end
-         ws2812.writergb(stripPin, rgb)
+            if string.sub(pkt,-2,-1) == "on" then
+                state = gpio.HIGH
+                print ("gpin:" .. string.sub(pkt,5,-3))
+                gpin = tonumber(string.sub(pkt,5,-3))
+            end
+            if string.sub(pkt,-3,-1) == "off" then
+                state = gpio.LOW
+                print ("gpin:" .. string.sub(pkt,5,-4))            
+                gpin = tonumber(string.sub(pkt,5,-4))
+            end
+            gpio.write(gpiolookup[gpin],state);    
+          end
+          if string.sub(pkt,1,7) == "sparkle" then
+             --wsnum = tonumber(string.sub(pkt,8,9))
+             wsrgb = string.sub(pkt,8,-1)
+             print ("wsrgb" .. wsrgb)
+             myTable = split(wsrgb,",")
+             sparkleNum = tonumber(myTable[1])
+             r = tonumber(myTable[2])
+             g = tonumber(myTable[3])
+             b = tonumber(myTable[4])
+             print (myTable[2])
+             print (myTable[3])
+             print (myTable[4])
+             sparkleTable[sparkleNum] = string.char(r, g, b) 
+             --print (sparkleTable)
+             rgb = ""
+             for loop = 1,12 do
+               rgb = (rgb .. sparkleTable[loop])
+             end
+             ws2812.writergb(stripPin, rgb)
+          end
       end
    end)
    conn:on("disconnection",function(conn) 
