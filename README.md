@@ -28,9 +28,9 @@ will set the first neopixel/sparkle to red
 
 For Scratch
 
-Run lanpy.py and then load in Scratch and enable Remote Sensor Connectors
+Run ScratchLAN.py and then load in Scratch and enable Remote Sensor Connectors
 
-do a broadcast linka.b.c.d replaing a.b.c.d with IP collected above
+do a broadcast linka.b.c.d replacing a.b.c.d with IP collected above
 
 e.g
 
@@ -41,4 +41,8 @@ Precede and broadcast text with send. e.g
 broadcast send gpio15on
 
 will switch esp8266 GPIO15 on
+
+broadcast send sparkle 1,255,0,0
+
+will set the first neopixel/sparkle to red
 
