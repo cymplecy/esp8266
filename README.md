@@ -11,7 +11,7 @@ Amend the WifConnect script with your WiFi settings an upload it
 
 Upload ScratchLua and make note of IP address shown (e.g 192.168.0.10)
 
-For BYOB
+**For BYOB**
 
 Open BYOB and connect to mesh and type in IP collected above
 
@@ -26,7 +26,7 @@ broadcast sparkle 1,255,0,0
 will set the first neopixel/sparkle to red
 
 
-For Scratch
+**For Scratch**
 
 Run ScratchLAN.py and then load in Scratch and enable Remote Sensor Connectors
 
