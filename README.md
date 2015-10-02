@@ -1,11 +1,11 @@
 # esp8266
-Scratch controlling ESP8266
+### Scratch controlling ESP8266
 
 This is my initial coding attempts to run a Lua script on an esp8266 board (I'm using an ESP-12 at moment).
 
 At the moment, it can be used to turn the GPIO pins on or off and control a single Neopixel/Sparkle
 
-Instructions
+## Instructions
 Your esp device must be running NodeMCU Lua firmware
 Amend the WifConnect script with your WiFi settings an upload it
 
@@ -45,4 +45,3 @@ will switch esp8266 GPIO15 on
 broadcast send sparkle 1,255,0,0
 
 will set the first neopixel/sparkle to red
-
