@@ -14,14 +14,13 @@ Upload ScratchLua and make note of IP address shown (e.g 192.168.0.10)
 **For BYOB**
 
 Open BYOB and connect to mesh and type in IP collected above
-
 to use
 
-broadcast gpio15on
+> broadcast gpio15on
 
 will switch gpio15on
 
-broadcast sparkle 1,255,0,0
+> broadcast sparkle 1,255,0,0
 
 will set the first neopixel/sparkle to red
 
@@ -34,14 +33,14 @@ do a broadcast linka.b.c.d replacing a.b.c.d with IP collected above
 
 e.g
 
-broadcast link192.168.0.10
+> broadcast link192.168.0.10
 
 Precede and broadcast text with send. e.g
 
-broadcast send gpio15on
+> broadcast send gpio15on
 
 will switch esp8266 GPIO15 on
 
-broadcast send sparkle 1,255,0,0
+> broadcast send sparkle 1,255,0,0
 
 will set the first neopixel/sparkle to red
