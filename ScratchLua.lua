@@ -75,13 +75,14 @@ function connected(conn)
              r = tonumber(myTable[2])
              g = tonumber(myTable[3])
              b = tonumber(myTable[4])
+             print (myTable[1])
              print (myTable[2])
              print (myTable[3])
              print (myTable[4])
              sparkleTable[sparkleNum] = string.char(r, g, b) 
              --print (sparkleTable)
              rgb = ""
-             for loop = 1,12 do
+             for loop = 1,30 do
                rgb = (rgb .. sparkleTable[loop])
              end
              ws2812.writergb(stripPin, rgb)
