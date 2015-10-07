@@ -5,7 +5,7 @@ stripPin = 2   -- Comment: GPIO5
 
 sparkleTable = {}
 
-gpio.mode(7,gpio.INPUT)
+gpio.mode(7,gpio.INPUT,gpio.PULLUP)
 gpio.trig(7,"both",function(level)
   print ("level: " .. level)
   conn:send(string.char(0,0,0,23)..'sensor-update "LeftLF"'..level)
@@ -22,7 +22,7 @@ function pinControl(pkt,g)
         pin = string.sub(pkt,1,-4)
   end
   pin = tonumber(pin)
-  if g == true then
+  if (g == true) then
     pin = gpiolookup[pin]
   end
   print ("pin :" .. pin )
