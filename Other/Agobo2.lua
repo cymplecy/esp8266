@@ -1,15 +1,9 @@
 gpiolookup = {[0]=3,[1]=10,[2]=4,[3]=9,[4]=1,[5]=2,[10]=12,[12]=6,[13]=7,[14]=5,[15]=8,[16]=0}
 --key = gpio, value = nodelua
-conn = net.createConnection(net.TCP, 0)
 stripPin = 2   -- Comment: GPIO5  
 
 sparkleTable = {}
 
-gpio.mode(7,gpio.INPUT)
-gpio.trig(7,"both",function(level)
-  print ("level: " .. level)
-  conn:send(string.char(0,0,0,23)..'sensor-update "LeftLF"'..level)
-end)
 function pinControl(pkt,g)
   state = gpio.LOW
   pin = ""
@@ -31,7 +25,7 @@ function pinControl(pkt,g)
 end
 
 function connected()
-
+   conn = net.createConnection(net.TCP, 0)
    print("Scratch connected")
    function s_output(str)
       if (conn~=nil)    then
