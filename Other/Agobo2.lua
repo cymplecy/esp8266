@@ -35,6 +35,25 @@ function pinControl(pkt,g)
   gpio.write(pin,state)  
 end
 
+function motor(pkt)
+  pin1 = tonumber(string.sub(pkt,1,1))
+  pin2 = tonumber(string.sub(pkt,2,2))
+  speed = tonumber(string.sub(pkt,3,-1))
+  
+  print ("pin1 pin 2 speed "..pin1 .. " " .. pin2 .. " " .. speed)
+  if speed > 0 then
+    gpio.mode(pin2,gpio.OUTPUT)
+    pwm.setup(pin1, 30, math.floor(1023 * speed / 100))
+    gpio.write(pin2,gpio.LOW) 
+    pwm.start(pin1) 
+  else
+    gpio.mode(pin2,gpio.OUTPUT)
+    pwm.setup(pin1, 30, (1023 - math.floor(1023 * speed / 100)))
+    gpio.write(pin2,gpio.HIGH) 
+    pwm.start(pin1) 
+  end
+end
+
 function connected()
 
    print("Scratch connected")
@@ -59,7 +78,10 @@ function connected()
           end
           if string.sub(pkt,1,1) == "d" then
             pinControl(string.sub(pkt,2,-1),false)
-          end          
+          end   
+          if string.sub(pkt,1,5) == "motor" then
+            motor(string.sub(pkt,6,-1),false)
+          end                  
           if string.sub(pkt,1,7) == "sparkle" then
              wsrgb = string.sub(pkt,8,-1)
              print ("wsrgb" .. wsrgb)
