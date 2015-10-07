@@ -26,7 +26,11 @@ function main()
             g = tonumber(string.sub(pkt,3,4), 16)
             b = tonumber(string.sub(pkt,5,6), 16) 
             wsrgb = string.char(r,g,b)
-            ws2812.writergb(2,wsrgb)
+            total = ""
+            for loop = 1,3 do
+                total = total .. wsrgb
+                ws2812.writergb(2,total)
+            end
         end
 
     end )

@@ -5,7 +5,7 @@ wsg = 0
 wsr = 0 
 wsb = 0  
 
-sparkleTable ={"ABC"}
+sparkleTable ={}
 
 
 function split(pString, pPattern)
@@ -37,6 +37,8 @@ function connected()
       end
    end
    conn:on("receive", function(conn, pl) 
+      print (string.byte(pl,1,1))
+      print (string.byte(pl,4,4))      
       msg = string.sub(pl,5,-1)
       print ("msg received:" .. msg)
       if string.sub(msg,1,9) == "broadcast" then
@@ -58,7 +60,8 @@ function connected()
                 print ("gpin:" .. string.sub(pkt,5,-4))            
                 gpin = tonumber(string.sub(pkt,5,-4))
             end
-            gpio.write(gpiolookup[gpin],state);    
+            gpio.mode(gpiolookup[gpin],gpio.OUTPUT)
+            gpio.write(gpiolookup[gpin],state)  
           end
           if string.sub(pkt,1,7) == "sparkle" then
              wsrgb = string.sub(pkt,8,-1)
@@ -74,8 +77,12 @@ function connected()
              print (myTable[4])
              sparkleTable[sparkleNum] = string.char(r, g, b) 
              rgb = ""
-             for loop = 1,30 do
-               rgb = (rgb .. sparkleTable[loop])
+             for loop = 1,5 do
+               if sparkleTable[loop] ~= nil then
+                rgb = (rgb .. sparkleTable[loop])
+               else
+                rgb = (rgb .. string.char(0, 0, 0))
+               end
              end
              ws2812.writergb(stripPin, rgb)
           end
@@ -102,13 +109,13 @@ print("Waiting a little bit to get an IP address...")
 
 
 tmr.alarm(1, 1000, 1, function() 
-   if wifi.sta.getip()=="0.0.0.0" or wifi.sta.getip() == nil then
-      print("Connect AP, Waiting...") 
-   else
-      print("Wifi AP connected. Wicon IP:")
-      print(wifi.sta.getip())
-      connected()
-      tmr.stop(1)
-   end
+  if wifi.sta.getip()=="0.0.0.0" or wifi.sta.getip() == nil then
+    print("Connect AP, Waiting...") 
+  else
+    print("Wifi AP connected. Wicon IP:")
+    print(wifi.sta.getip())
+    connected()
+    tmr.stop(1)
+  end
 end)
 
