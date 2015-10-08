@@ -39,6 +39,8 @@ function motor(pkt)
   pin1 = tonumber(string.sub(pkt,1,1))
   pin2 = tonumber(string.sub(pkt,2,2))
   speed = tonumber(string.sub(pkt,3,-1))
+  
+  print ("pin1 " .. pin1 .. " pin2 " .. pin2 .. " speed " .. speed)
   if speed > 0 then
     gpio.mode(pin2,gpio.OUTPUT)
     pwm.setup(pin1, 30, math.floor(1023 * math.abs(speed) / 100))
@@ -53,6 +55,7 @@ function motor(pkt)
 end
 
 function connected()
+
    print("Scratch connected")
    function s_output(str)
       if (conn~=nil)    then
@@ -102,23 +105,29 @@ function connected()
    end)
 
    conn:on("disconnection",function(conn) 
+      print ("")
       print ("DISCONNECTED")
+      print ("")
    end)
    conn:connect(42001,"192.168.0.16")
 end
 
+
+print("Setting the device up as a STATION")
 wifi.setmode(wifi.STATION)
+
+print("Connecting to the AP")
 wifi.sta.config("CYCY", "")
 wifi.sta.connect()
 
-print("Waiting for IP address...")
+print("Waiting a little bit to get an IP address...")
 
 
 tmr.alarm(1, 1000, 1, function() 
   if wifi.sta.getip()=="0.0.0.0" or wifi.sta.getip() == nil then
-    print("Waiting...") 
+    print("Connect AP, Waiting...") 
   else
-    print("Wifi connected")
+    print("Wifi AP connected. Wicon IP:")
     print(wifi.sta.getip())
     connected()
     tmr.stop(1)
