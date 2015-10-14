@@ -7,8 +7,7 @@ dweet = net.createConnection(net.TCP, 0)
 dweet:on("connection", function(conn, payload)
     dweet:send(
         "POST /dweet/for/" .. DWEET_ID .. 
-        "?temperature=" .. math.random(-20, 50) .. 
-        "&humidity=" .. math.random(-20, 50) ..
+        "?miniBotIP=" .. wifi.sta.getip() ..
         " HTTP/1.1\r\nHost: dweet.io\r\n" ..
         "Connection: close\r\nAccept: */*\r\n\r\n"
     )
@@ -19,18 +18,6 @@ stripPin = 2   -- Comment: GPIO5
 
 sparkleTable = {}
 
-gpio.mode(7,gpio.INPUT,gpio.PULLUP)
-gpio.trig(7,"both",function(level)
-  print ("level7: " .. level)
-  conn:send(string.char(0,0,0,23)..'sensor-update "LeftLF"'..level)
-  tmr.delay(500*1000)
-end)
-gpio.mode(8,gpio.INPUT,gpio.PULLUP)
-gpio.trig(8,"both",function(level)
-  print ("level8: " .. level)
-  conn:send(string.char(0,0,0,24)..'sensor-update "RightLF"'..level)
-  tmr.delay(500*1000)
-end)
 function pinControl(pkt,g)
   state = gpio.LOW
   pin = ""
