@@ -68,49 +68,15 @@ function connected()
           quote2 = string.find(msg, '"', 11 )
           pkt = string.sub(msg,11,quote2 - 1)
           print ("pkt:" .. pkt)
-          if pkt == "on" then
-          i2c.start(id)
-i2c.address(id,CODEBUG,i2c.TRANSMITTER)
-i2c.write(id,SET)
-i2c.write(id,LED_LINE)
-i2c.write(id,31)
-i2c.stop(id)
-          end
-          if pkt == "off" then
-i2c.start(id)
-i2c.address(id,CODEBUG,i2c.TRANSMITTER)
-i2c.write(id,SET)
-i2c.write(id,LED_LINE)
-i2c.write(id,0)
-i2c.stop(id)
-          end          
-          if string.sub(pkt,1,4) == "gpio" then
-            pinControl(string.sub(pkt,5,-1),true)
-          end
-          if string.sub(pkt,1,1) == "d" then
-            pinControl(string.sub(pkt,2,-1),false)
-          end   
-          if string.sub(pkt,1,5) == "motor" then
-            motor(string.sub(pkt,6,-1),false)
-          end                  
-          if string.sub(pkt,1,7) == "sparkle" then
-             wsrgb = string.sub(pkt,8,-1)
-             print ("wsrgb" .. wsrgb)
-             sparkleNum,r,g,b = wsrgb:match("(%d%d?%d?)%,(%d%d?%d?)%,(%d%d?%d?)%,(%d%d?%d?)" )
-             if sparkleNum == "0" then
-                sparkleNum = "1"
-             end
-             sparkleTable[tonumber(sparkleNum)] = string.char(r,g, b) 
-             rgb = ""
-             for loop = 1,12 do
-               if sparkleTable[loop] ~= nil then
-                 rgb = (rgb .. sparkleTable[loop])
-               else
-                 rgb = (rgb .. string.char(0,0,0))
-               end
-             end
-             ws2812.writergb(stripPin,rgb)
-             rgb = ""
+          if string.sub(pkt,1,3) == "row" then
+            row = tonumber(string.sub(pkt,4,4))
+            data = tonumber(string.sub(pkt,6))
+            i2c.start(id)
+            i2c.address(id,CODEBUG,i2c.TRANSMITTER)
+            i2c.write(id,SET)
+            i2c.write(id,row)
+            i2c.write(id,data)
+            i2c.stop(id)
           end
       end
    end)
